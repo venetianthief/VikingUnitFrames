@@ -7,7 +7,7 @@ require "Window"
 
 local VikingLib
 local VikingUnitFrames = {
-  _VERSION = 'VikingUnitFrames.lua 0.1.0',
+  _VERSION = 'VikingUnitFrames.lua 0.1.1',
   _URL     = 'https://github.com/vikinghug/VikingUnitFrames',
   _DESCRIPTION = '',
   _LICENSE = [[
@@ -53,6 +53,7 @@ local tClassName = {
 }
 
 
+-- TODO: Settings that determine what size icon to use.
 local tClassToSpriteMap = {
   [GameLib.CodeEnumClass.Warrior]       = "VikingSprites:Icon_Class_Warrior_24",
   [GameLib.CodeEnumClass.Engineer]      = "VikingSprites:Icon_Class_Engineer_24",
@@ -230,6 +231,7 @@ end
 function VikingUnitFrames:GetDefaults()
 
   local tColors = VikingLib.Settings.GetColors()
+  local tClassColors = VikingLib.Settings.GetClassColors()
 
   return {
     char = {
@@ -689,21 +691,27 @@ end
 
 function VikingUnitFrames:SetClass(tFrame)
 
-  local sPlayerIconSprite, sRankIconSprite, locNameText
+  local sPlayerIconSprite, sRankIconSprite, sClassColor, locNameText
   local sUnitType = tFrame.unit:GetType()
 
   if sUnitType == "Player" then
     locNameText         = { 27, 0, -27, 26 }
     sRankIconSprite   = ""
     sPlayerIconSprite = tClassToSpriteMap[tFrame.unit:GetClassId()]
+    sClassColor = "ff" .. tClassColors[tFrame.unit:GetClassId()]
+
+--    tFrame.wndUnitFrame:FindChild("Background"):SetBGColor(sClassColor)
   else
     locNameText         = { 34, 0, -30, 26 }
     sPlayerIconSprite = ""
     sRankIconSprite   = tRankToSpriteMap[tFrame.unit:GetRank()]
+
+--    tFrame.wndUnitFrame:FindChild("Background"):SetBGColor("99" .. tColors.purple)
   end
 
   tFrame.wndUnitFrame:FindChild("TargetInfo:UnitName"):SetAnchorOffsets(locNameText[1], locNameText[2], locNameText[3], locNameText[4])
   tFrame.wndUnitFrame:FindChild("TargetInfo:ClassIcon"):SetSprite(sPlayerIconSprite)
+  tFrame.wndUnitFrame:FindChild("TargetInfo:ClassIcon"):SetBGColor(sClassColor)
   tFrame.wndUnitFrame:FindChild("TargetInfo:RankIcon"):SetSprite(sRankIconSprite)
 
 end
@@ -924,7 +932,7 @@ end
 --
 -- Unit Destroyed
 --
--- Checks if focussed unit is dead and then remove focus
+-- Checks if focused unit is dead and then remove focus
 
 function VikingUnitFrames:OnUnitDestroyed(unit)
   local PlayerUnit = GameLib:GetPlayerUnit()
