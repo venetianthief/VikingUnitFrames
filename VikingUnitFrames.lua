@@ -6,6 +6,10 @@ require "ApolloColor"
 require "Window"
 
 local VikingLib
+
+--------------------------------------------------------------------------------
+-- VikingUnitFrames Module Definition
+--------------------------------------------------------------------------------
 local VikingUnitFrames = {
   _VERSION = 'VikingUnitFrames.lua 0.1.0',
   _URL     = 'https://github.com/vikinghug/VikingUnitFrames',
@@ -84,6 +88,7 @@ local tTargetMarkSpriteMap = {
   "Icon_Windows_UI_CRB_Marker_UFO"
 }
 
+
 function VikingUnitFrames:new(o)
   o = o or {}
   setmetatable(o, self)
@@ -91,14 +96,17 @@ function VikingUnitFrames:new(o)
   return o
 end
 
+
 function VikingUnitFrames:Init()
   Apollo.RegisterAddon(self, nil, nil, {"VikingLibrary"})
 end
+
 
 function VikingUnitFrames:OnLoad()
   self.xmlDoc = XmlDoc.CreateFromFile("VikingUnitFrames.xml")
   self.xmlDoc:RegisterCallback("OnDocumentReady", self)
 end
+
 
 function VikingUnitFrames:OnDocumentReady()
   if self.xmlDoc == nil then
@@ -115,14 +123,18 @@ function VikingUnitFrames:OnDocumentReady()
   Apollo.RegisterEventHandler("ChangeWorld"                , "OnWorldChanged"               , self)
   Apollo.RegisterEventHandler("UnitDestroyed"              , "OnUnitDestroyed"              , self)
 
-  Apollo.RegisterSlashCommand("focus", "OnFocusSlashCommand", self)
-  Apollo.RegisterSlashCommand("targetfocus", "OnTargetfocusSlashCommand", self)
+  Apollo.RegisterSlashCommand("focus"                      , "OnFocusSlashCommand"          , self)
+  Apollo.RegisterSlashCommand("targetfocus"                , "OnTargetfocusSlashCommand"    , self)
 
   self.bDocLoaded = true
   self:OnRequiredFlagsChanged()
 
 end
 
+
+--------------------------------------------------------------------------------
+-- Register Viking Windows with Windows Management
+--------------------------------------------------------------------------------
 function VikingUnitFrames:OnWindowManagementReady()
   Event_FireGenericEvent("WindowManagementAdd", { wnd = self.tPlayerFrame.wndUnitFrame,      strName = "Viking Player Frame" })
   Event_FireGenericEvent("WindowManagementAdd", { wnd = self.tTargetFrame.wndUnitFrame,      strName = "Viking Target Frame" })
@@ -131,10 +143,10 @@ function VikingUnitFrames:OnWindowManagementReady()
   Event_FireGenericEvent("WindowManagementAdd", { wnd = self.tPlayerMountFrame.wndPetFrame,  strName = "Viking Player Mount Frame" })
   Event_FireGenericEvent("WindowManagementAdd", { wnd = self.tPlayerLPetFrame.wndPetFrame,   strName = "Viking Player Left Pet Frame" })
   Event_FireGenericEvent("WindowManagementAdd", { wnd = self.tPlayerRPetFrame.wndPetFrame,   strName = "Viking Player Right Pet Frame" })
-  Event_FireGenericEvent("WindowManagementAdd", { wnd = self.tCluster1Frame.wndPetFrame,     strName = "Viking cluster frame 1" })
-  Event_FireGenericEvent("WindowManagementAdd", { wnd = self.tCluster2Frame.wndPetFrame,     strName = "Viking cluster frame 2" })
-  Event_FireGenericEvent("WindowManagementAdd", { wnd = self.tCluster3Frame.wndPetFrame,     strName = "Viking cluster frame 3" })
-  Event_FireGenericEvent("WindowManagementAdd", { wnd = self.tCluster4Frame.wndPetFrame,     strName = "Viking cluster frame 4" })
+  Event_FireGenericEvent("WindowManagementAdd", { wnd = self.tCluster1Frame.wndPetFrame,     strName = "Viking Cluster Frame 1" })
+  Event_FireGenericEvent("WindowManagementAdd", { wnd = self.tCluster2Frame.wndPetFrame,     strName = "Viking Cluster Frame 2" })
+  Event_FireGenericEvent("WindowManagementAdd", { wnd = self.tCluster3Frame.wndPetFrame,     strName = "Viking Cluster Frame 3" })
+  Event_FireGenericEvent("WindowManagementAdd", { wnd = self.tCluster4Frame.wndPetFrame,     strName = "Viking Cluster Frame 4" })
 end
 
 
@@ -164,11 +176,11 @@ function VikingUnitFrames:OnUnitLevelChange()
 end
 
 
---
+--------------------------------------------------------------------------------
 -- CreateUnitFrame
 --
---   Builds a UnitFrame instance
-
+-- Builds a UnitFrame instance
+--------------------------------------------------------------------------------
 function VikingUnitFrames:CreateUnitFrame(name)
 
   local sFrame = "t" .. name .. "Frame"
@@ -197,10 +209,12 @@ function VikingUnitFrames:CreateUnitFrame(name)
 
 end
 
---
+
+--------------------------------------------------------------------------------
 -- CreatePetFrame
 --
---   Builds a PetFrame instance
+-- Builds a PetFrame instance
+--------------------------------------------------------------------------------
 function VikingUnitFrames:CreatePetFrame(name)
 
   local sFrame = "t" .. name .. "Frame"
@@ -227,6 +241,10 @@ function VikingUnitFrames:CreatePetFrame(name)
 
 end
 
+
+--------------------------------------------------------------------------------
+-- Sets up Default Colors and Positions
+--------------------------------------------------------------------------------
 function VikingUnitFrames:GetDefaults()
 
   local tColors = VikingLib.Settings.GetColors()
@@ -263,19 +281,19 @@ function VikingUnitFrames:GetDefaults()
           fPoints  = {0.5, 1, 0.5, 1},
           nOffsets = {-210, -155, -150, -125}
         },
-	cluster1Frame = {
+        cluster1Frame = {
           fPoints  = {0.5, 1, 0.5, 1},
           nOffsets = {100, -155, 160, -125}
         },
-	cluster2Frame = {
+        cluster2Frame = {
           fPoints  = {0.5, 1, 0.5, 1},
           nOffsets = {170, -155, 230, -125}
         },
-	cluster3Frame = {
+        cluster3Frame = {
           fPoints  = {0.5, 1, 0.5, 1},
           nOffsets = {240, -155, 300, -125}
         },
-	cluster4Frame = {
+        cluster4Frame = {
           fPoints  = {0.5, 1, 0.5, 1},
           nOffsets = {310, -155, 370, -125}
         },
@@ -312,10 +330,10 @@ function VikingUnitFrames:GetDefaults()
 
 end
 
---
+
+--------------------------------------------------------------------------------
 -- OnCharacterLoaded
---
---
+--------------------------------------------------------------------------------
 function VikingUnitFrames:OnCharacterLoaded()
   local playerUnit = GameLib.GetPlayerUnit()
   if not playerUnit then
@@ -371,6 +389,8 @@ end
 
 
 local LoadingTimer
+
+
 function VikingUnitFrames:OnWorldChanged()
   self:OnRequiredFlagsChanged()
 
@@ -389,25 +409,23 @@ function VikingUnitFrames:OnLoading()
 end
 
 
---
+--------------------------------------------------------------------------------
 -- OnTargetUnitChanged
---
-
+--------------------------------------------------------------------------------
 function VikingUnitFrames:OnTargetUnitChanged(unit)
   self:UpdateUnitFrame(self.tTargetFrame, unit)
 end
 
 
---
+--------------------------------------------------------------------------------
 -- OnFocusUnitChanged
---
-
+--------------------------------------------------------------------------------
 function VikingUnitFrames:OnFocusUnitChanged(unit)
   self:UpdateUnitFrame(self.tFocusFrame, unit)
 end
 
-function VikingUnitFrames:UpdateUnitFrame(tFrame, unit)
 
+function VikingUnitFrames:UpdateUnitFrame(tFrame, unit)
   tFrame.wndUnitFrame:Show(unit ~= nil)
 
   if unit ~= nil then
@@ -418,8 +436,8 @@ function VikingUnitFrames:UpdateUnitFrame(tFrame, unit)
 
 end
 
-function VikingUnitFrames:UpdatePetFrame(tFrame, unit)
 
+function VikingUnitFrames:UpdatePetFrame(tFrame, unit)
   tFrame.wndPetFrame:Show(unit ~= nil)
 
   if unit ~= nil then
@@ -430,12 +448,13 @@ function VikingUnitFrames:UpdatePetFrame(tFrame, unit)
       if unit:GetType() == "Pet" then
         self:SetUnitName(tFrame, string.sub(unit:GetName(),1,2)) -- use first letters of name
       else -- assume cluster
-	self:SetUnitName(tFrame, string.sub(unit:GetName(),1,1))
+        self:SetUnitName(tFrame, string.sub(unit:GetName(),1,1))
       end
     end
   end
 
 end
+
 
 function VikingUnitFrames:OnFocusSlashCommand()
   local unitTarget = GameLib.GetTargetUnit()
@@ -443,17 +462,19 @@ function VikingUnitFrames:OnFocusSlashCommand()
   GameLib.GetPlayerUnit():SetAlternateTarget(unitTarget)
 end
 
+
 function VikingUnitFrames:OnTargetfocusSlashCommand()
   local unitTarget = GameLib.GetPlayerUnit():GetAlternateTarget()
 
   GameLib.SetTargetUnit(unitTarget)
 end
 
---
+
+--------------------------------------------------------------------------------
 -- OnFrame
 --
 -- Render loop
-
+--------------------------------------------------------------------------------
 function VikingUnitFrames:OnFrame()
   if not self.tPlayerFrame.unit then return end
 
@@ -493,27 +514,28 @@ function VikingUnitFrames:OnFrame()
     -- PlayerPetFrames
     local currentpet = GameLib:GetPlayerPets()[1]
     if currentpet ~= nil then
-       local tt = currentpet:GetName().. "\n"
-          .. "hp: " .. currentpet:GetHealth() .. "/" .. currentpet:GetMaxHealth() .. "\n"
-          .. "shield: " .. currentpet:GetShieldCapacity() .. "/" .. currentpet:GetShieldCapacityMax()
+      local tt = currentpet:GetName() .. "\n"
+      .. "Health: " .. currentpet:GetHealth() .. "/" .. currentpet:GetMaxHealth() .. "\n"
+      .. "Shield: " .. currentpet:GetShieldCapacity() .. "/" .. currentpet:GetShieldCapacityMax()
 
-       self:UpdatePetFrame(self.tPlayerLPetFrame, GameLib:GetPlayerPets()[1], true)
-       self:UpdateBars(self.tPlayerLPetFrame)
-       self.tPlayerLPetFrame["wndPetFrame"]:SetTooltip(tt)
-       self.tPlayerLPetFrame["wndHealthBar"]:FindChild("Text"):SetText("")
-       self.tPlayerLPetFrame["wndShieldBar"]:FindChild("Text"):SetText("")
+      self:UpdatePetFrame(self.tPlayerLPetFrame, GameLib:GetPlayerPets()[1], true)
+      self:UpdateBars(self.tPlayerLPetFrame)
+      self.tPlayerLPetFrame["wndPetFrame"]:SetTooltip(tt)
+      self.tPlayerLPetFrame["wndHealthBar"]:FindChild("Text"):SetText("")
+      self.tPlayerLPetFrame["wndShieldBar"]:FindChild("Text"):SetText("")
     end
+
     currentpet = GameLib:GetPlayerPets()[2]
     if currentpet ~= nil then
-       local tt = currentpet:GetName().. "\n"
-          .. "hp: " .. currentpet:GetHealth() .. "/" .. currentpet:GetMaxHealth() .. "\n"
-          .. "shield: " .. currentpet:GetShieldCapacity() .. "/" .. currentpet:GetShieldCapacityMax()
+      local tt = currentpet:GetName() .. "\n"
+      .. "Health: " .. currentpet:GetHealth() .. "/" .. currentpet:GetMaxHealth() .. "\n"
+      .. "Shield: " .. currentpet:GetShieldCapacity() .. "/" .. currentpet:GetShieldCapacityMax()
 
-       self:UpdatePetFrame(self.tPlayerRPetFrame, GameLib:GetPlayerPets()[2], true)
-       self:UpdateBars(self.tPlayerRPetFrame)
-       self.tPlayerRPetFrame["wndHealthBar"]:FindChild("Text"):SetText("")
-       self.tPlayerRPetFrame["wndShieldBar"]:FindChild("Text"):SetText("")
-       self.tPlayerRPetFrame["wndPetFrame"]:SetTooltip(tt)
+      self:UpdatePetFrame(self.tPlayerRPetFrame, GameLib:GetPlayerPets()[2], true)
+      self:UpdateBars(self.tPlayerRPetFrame)
+      self.tPlayerRPetFrame["wndHealthBar"]:FindChild("Text"):SetText("")
+      self.tPlayerRPetFrame["wndShieldBar"]:FindChild("Text"):SetText("")
+      self.tPlayerRPetFrame["wndPetFrame"]:SetTooltip(tt)
     end
 
     -- ClusterFrames
@@ -525,31 +547,39 @@ function VikingUnitFrames:OnFrame()
     end
     if self.db.char.Cluster["ClusterFrames"] == true then
       if target ~= nil then
-	local cluster = target:GetClusterUnits()
-	for i, unit in ipairs(cluster) do
-	  local frameName = "tCluster" .. i .. "Frame"
-	  local frame = self[frameName]
-	  self:UpdatePetFrame(frame, unit)
-	  self:UpdateBars(frame)
-	  local tt = unit:GetName().. "\n"
-	    .. "hp: " .. unit:GetHealth() .. "/" .. unit:GetMaxHealth() .. "\n"
-	    .. "shield: " .. unit:GetShieldCapacity() .. "/" .. unit:GetShieldCapacityMax()
-	  frame["wndHealthBar"]:FindChild("Text"):SetText("")
-	  frame["wndShieldBar"]:FindChild("Text"):SetText("")
-	  frame["wndPetFrame"]:SetTooltip(tt)
-	end
+        local cluster = target:GetClusterUnits()
+        for i, unit in ipairs(cluster) do
+        local frameName = "tCluster" .. i .. "Frame"
+        local frame = self[frameName]
+        self:UpdatePetFrame(frame, unit)
+        self:UpdateBars(frame)
+
+        -- Build ClusterFrames tooltips
+        local tt = unit:GetName() .. "\n"
+          -- Only show Health if available
+          if unit:GetMaxHealth() ~= nil then
+            tt = tt .. "Health: " .. VikingLib:NumberToHuman(unit:GetHealth()) .. "/" .. VikingLib:NumberToHuman(unit:GetMaxHealth()) .. "\n"
+          end
+          -- Only show Shield if available
+          if unit:GetShieldCapacityMax() ~= nil then
+            tt = tt .. "Shield: " .. VikingLib:NumberToHuman(unit:GetShieldCapacity()) .. "/" .. VikingLib:NumberToHuman(unit:GetShieldCapacityMax())
+          end
+
+        frame["wndHealthBar"]:FindChild("Text"):SetText("")
+        frame["wndShieldBar"]:FindChild("Text"):SetText("")
+        frame["wndPetFrame"]:SetTooltip(tt)
+        end
       end
     end
-
   end
 end
 
 
---
+--------------------------------------------------------------------------------
 -- UpdateBars
 --
 -- Update the bars for a unit on UnitFrame
-
+--------------------------------------------------------------------------------
 function VikingUnitFrames:UpdateBars(tFrame)
 
   local tHealthMap = {
@@ -580,10 +610,11 @@ function VikingUnitFrames:UpdateBars(tFrame)
 end
 
 
+--------------------------------------------------------------------------------
 -- SetBar
 --
 -- Set Bar Value on UnitFrame
-
+--------------------------------------------------------------------------------
 function VikingUnitFrames:SetBar(tFrame, tMap)
   if tFrame.unit ~= nil and tMap ~= nil then
     local unit          = tFrame.unit
@@ -592,21 +623,19 @@ function VikingUnitFrames:SetBar(tFrame, tMap)
     local wndBar        = tFrame["wnd" .. tMap.bar .. "Bar"]
     local wndProgress   = wndBar:FindChild("ProgressBar")
     local wndText       = wndBar:FindChild("Text")
-    local sProgressMax  = self:NumberToHuman(nMax)
-    local sProgressCurr = self:NumberToHuman(nCurrent)
+    local sProgressMax  = VikingLib:NumberToHuman(nMax)
+    local sProgressCurr = VikingLib:NumberToHuman(nCurrent)
     local sText         = ""
 
-    --Temp fix for shiled not displaying correctly when gear is changed
+    --Temp fix for shield not displaying correctly when gear is changed
     if nCurrent ~= nil and tMap.bar == "Shield" and nCurrent > nMax then
       nCurrent = nMax
     end
-
 
     local isValidBar = (nMax ~= nil and nMax ~= 0) and true or false
     wndBar:Show(isValidBar, false)
 
     if isValidBar then
-
       wndProgress:SetMax(nMax)
       wndProgress:SetProgress(nCurrent)
 
@@ -653,40 +682,12 @@ function VikingUnitFrames:SetBar(tFrame, tMap)
   end
 end
 
--- Number formating
---
---Uses k instead of 1000
 
-function VikingUnitFrames:NumberToHuman(num)
-  if num ~= nil and num > 999 then
-    local decimalPlaces = 10^1
-    local roundedNum    = math.floor(num)
-    local sizes = {
-      { 'Billions', 1000000000 },
-      { 'Millions', 1000000 },
-      { 'Short', 1000 },
-    }
-
-    for i, value in ipairs(sizes) do
-      local abbrev = value[1]
-      local size = value[2]
-      if roundedNum >= size then
-        local number = math.floor(roundedNum * decimalPlaces / size) / decimalPlaces
-        local sType  = number % 1 ~= 0 and "Float" or "Whole"
-        local sFormatString = Apollo.GetString('TargetFrame_' .. abbrev .. 'Number' .. sType)
-
-        return String_GetWeaselString(sFormatString, number)
-      end
-    end
-  end
-  return num
-end
-
---
+--------------------------------------------------------------------------------
 -- SetClass
 --
 -- Set Class on UnitFrame
-
+--------------------------------------------------------------------------------
 function VikingUnitFrames:SetClass(tFrame)
 
   local sPlayerIconSprite, sRankIconSprite, locNameText
@@ -709,11 +710,11 @@ function VikingUnitFrames:SetClass(tFrame)
 end
 
 
+--------------------------------------------------------------------------------
+-- SetTargetMark
 --
--- SetDisposition
---
--- Set Disposition on UnitFrame
-
+-- Set Target Mark on UnitFrame
+--------------------------------------------------------------------------------
 function VikingUnitFrames:SetTargetMark(tFrame)
   if not tFrame.unit then return else end
 
@@ -729,25 +730,24 @@ function VikingUnitFrames:SetTargetMark(tFrame)
 end
 
 
---
+--------------------------------------------------------------------------------
 -- SetDisposition
 --
 -- Set Disposition on UnitFrame
-
+--------------------------------------------------------------------------------
 function VikingUnitFrames:SetDisposition(tFrame, targetUnit)
   tFrame.disposition = targetUnit:GetDispositionTo(self.tPlayerFrame.unit)
-
 
   local dispositionColor = ApolloColor.new(self.generalDb.char.dispositionColors[tFrame.disposition])
   tFrame.wndUnitFrame:FindChild("TargetInfo:UnitName"):SetTextColor(dispositionColor)
 end
 
 
---
+--------------------------------------------------------------------------------
 -- SetUnit
 --
 -- Set Unit on UnitFrame
-
+--------------------------------------------------------------------------------
 function VikingUnitFrames:SetUnit(tFrame, unit)
   local frame = tFrame.wndUnitFrame or tFrame.wndPetFrame
   tFrame.unit = unit
@@ -758,41 +758,39 @@ function VikingUnitFrames:SetUnit(tFrame, unit)
     self:SetDisposition(tFrame, unit)
   end
 
-
-
   -- Set the Data to the unit, for mouse events
   frame:SetData(tFrame.unit)
-
 end
 
 
---
+--------------------------------------------------------------------------------
 -- SetUnitName
 --
 -- Set Name on UnitFrame
-
+--------------------------------------------------------------------------------
 function VikingUnitFrames:SetUnitName(tFrame, sName)
   local frame = tFrame.wndUnitFrame or tFrame.wndPetFrame
   frame:FindChild("UnitName"):SetText(sName)
 end
 
 
---
+--------------------------------------------------------------------------------
 -- SetUnitLevel
 --
 -- Set Level on UnitFrame
-
+--------------------------------------------------------------------------------
 function VikingUnitFrames:SetUnitLevel(tFrame)
   if tFrame.unit == nil then return end
   local sLevel = tFrame.unit:GetLevel()
   tFrame.wndUnitFrame:FindChild("UnitLevel"):SetText(sLevel)
 end
 
---
+
+--------------------------------------------------------------------------------
 -- SetInterruptArmor
 --
--- Set Level on UnitFrame
-
+-- Set Interrupt Armor number on UnitFrame
+--------------------------------------------------------------------------------
 function VikingUnitFrames:SetInterruptArmor(tFrame)
   if tFrame.unit == nil then return end
 
@@ -817,13 +815,12 @@ function VikingUnitFrames:SetInterruptArmor(tFrame)
 end
 
 
---
+--------------------------------------------------------------------------------
 -- InitColor
 --
 -- Let's initialize some colors from settings
-
+--------------------------------------------------------------------------------
 function VikingUnitFrames:InitColors(tFrame)
-
   local frame = tFrame.wndUnitFrame or tFrame.wndPetFrame
   local colors = {
     background = {
@@ -846,11 +843,11 @@ function VikingUnitFrames:InitColors(tFrame)
 end
 
 
-
+--------------------------------------------------------------------------------
 -- ShowCastBar
 --
 -- Check to see if a unit is casting, if so, render the cast bar
-
+--------------------------------------------------------------------------------
 function VikingUnitFrames:ShowCastBar(tFrame)
 
   -- If no unit then don't do anything
@@ -871,10 +868,12 @@ function VikingUnitFrames:ShowCastBar(tFrame)
   self:UpdateCastBar(tFrame, bCasting, bStopCast)
 end
 
---ShowBuffBar
---
--- Check to see if Buff's should be displayed
 
+--------------------------------------------------------------------------------
+-- ShowBuffBar
+--
+-- Check to see if Buffs should be displayed
+--------------------------------------------------------------------------------
 function VikingUnitFrames:ShowBuffBar(tFrame)
 
   -- If no unit or pet then don't do anything
@@ -888,11 +887,12 @@ function VikingUnitFrames:ShowBuffBar(tFrame)
 
 end
 
---
+
+--------------------------------------------------------------------------------
 -- UpdateCastBar
 --
 -- Casts that have timers use this method to indicate their progress
-
+--------------------------------------------------------------------------------
 function VikingUnitFrames:UpdateCastBar(tFrame, bCasting, bStopCast)
 
   -- If just started casting
@@ -921,11 +921,12 @@ function VikingUnitFrames:UpdateCastBar(tFrame, bCasting, bStopCast)
   end
 end
 
---
+
+--------------------------------------------------------------------------------
 -- Unit Destroyed
 --
--- Checks if focussed unit is dead and then remove focus
-
+-- Checks if focused unit is dead and then remove focus
+--------------------------------------------------------------------------------
 function VikingUnitFrames:OnUnitDestroyed(unit)
   local PlayerUnit = GameLib:GetPlayerUnit()
 
@@ -939,10 +940,10 @@ function VikingUnitFrames:OnUnitDestroyed(unit)
   end
 end
 
------------------------------------------------------------------------------------------------
--- Cast Timer
------------------------------------------------------------------------------------------------
 
+--------------------------------------------------------------------------------
+-- Cast Timer
+--------------------------------------------------------------------------------
 function VikingUnitFrames:OnCastPlayerFrameTimerTick()
   self:UpdateCastTimer(self.tPlayerFrame)
 end
@@ -952,13 +953,16 @@ function VikingUnitFrames:OnCastTargetFrameTimerTick()
   self:UpdateCastTimer(self.tTargetFrame)
 end
 
+
 function VikingUnitFrames:OnCastFocusFrameTimerTick()
   self:UpdateCastTimer(self.tFocusFrame)
 end
 
+
 function VikingUnitFrames:OnCastToTFrameTimerTick()
   self:UpdateCastTimer(self.tToTFrame)
 end
+
 
 function VikingUnitFrames:UpdateCastTimer(tFrame)
   local wndProgressBar = tFrame.wndCastBar:FindChild("ProgressBar")
@@ -978,11 +982,9 @@ function VikingUnitFrames:KillCastTimer(tFrame)
 end
 
 
-
----------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- UnitFrame Functions
----------------------------------------------------------------------------------------------------
-
+--------------------------------------------------------------------------------
 function VikingUnitFrames:OnMouseButtonUp( wndHandler, wndControl, eMouseButton, nLastRelativeMouseX, nLastRelativeMouseY, bDoubleClick, bStopPropagation )
   if wndHandler ~= wndControl then return end
   local unit = wndHandler:GetData()
@@ -998,6 +1000,7 @@ function VikingUnitFrames:OnMouseButtonUp( wndHandler, wndControl, eMouseButton,
   end
 end
 
+
 function VikingUnitFrames:OnGenerateBuffTooltip(wndHandler, wndControl, tType, splBuff)
   if wndHandler == wndControl then
     return
@@ -1005,10 +1008,10 @@ function VikingUnitFrames:OnGenerateBuffTooltip(wndHandler, wndControl, tType, s
   Tooltip.GetBuffTooltipForm(self, wndControl, splBuff, {bFutureSpell = false})
 end
 
----------------------------------------------------------------------------------------------------
--- VikingSettings Functions
----------------------------------------------------------------------------------------------------
 
+--------------------------------------------------------------------------------
+-- VikingSettings Functions
+--------------------------------------------------------------------------------
 function VikingUnitFrames:UpdateSettingsForm(wndContainer)
   -- Text Style
   wndContainer:FindChild("TextStyle:Content:Value"):SetCheck(self.db.char.textStyle["Value"])
@@ -1050,25 +1053,31 @@ function VikingUnitFrames:OnSettingsTextStyle(wndHandler, wndControl, eMouseButt
   self.db.char.textStyle[wndControl:GetName()] = wndControl:IsChecked()
 end
 
+
 function VikingUnitFrames:OnSettingsBarColor( wndHandler, wndControl, eMouseButton )
   VikingLib.Settings.ShowColorPickerForSetting(self.db.char.colors[wndControl:GetParent():GetName()], wndControl:GetName(), nil, wndControl)
 end
+
 
 function VikingUnitFrames:OnSettingsCastBar(wndHandler, wndControl, eMouseButton)
   self.db.char.castBar[wndControl:GetName()] = wndControl:IsChecked()
 end
 
+
 function VikingUnitFrames:OnSettingsToT(wndHandler, wndControl, eMouseButton)
   self.db.char.ToT[wndControl:GetName()] = wndControl:IsChecked()
 end
+
 
 function VikingUnitFrames:OnSettingsCluster(wndHandler, wndControl, eMouseButton)
   self.db.char.Cluster[wndControl:GetName()] = wndControl:IsChecked()
 end
 
+
 function VikingUnitFrames:OnSettingsBuffs(wndHandler, wndControl, eMouseButton)
   self.db.char.buffs[wndControl:GetName()] = wndControl:IsChecked()
 end
+
 
 local VikingUnitFramesInst = VikingUnitFrames:new()
 VikingUnitFramesInst:Init()
