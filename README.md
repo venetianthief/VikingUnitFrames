@@ -1,5 +1,11 @@
-# VikingTargetFrame
+# VikingUnitFrames
 
+### Requirements to use this:
+
+* [VikingLibrary] (https://github.com/vikinghug/VikingLibrary)
+
+### Replaces Carbine:
+* TargetFrame
 
 ### Want to contribute?
 
