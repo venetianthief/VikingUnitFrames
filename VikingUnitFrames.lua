@@ -133,7 +133,7 @@ end
 
 
 --------------------------------------------------------------------------------
--- Register Viking Windows with Windows Management
+-- START: Register VikingUnitFrames Windows with Windows Management
 --------------------------------------------------------------------------------
 function VikingUnitFrames:OnWindowManagementReady()
   Event_FireGenericEvent("WindowManagementAdd", { wnd = self.tPlayerFrame.wndUnitFrame,      strName = "Viking Player Frame" })
@@ -149,16 +149,6 @@ function VikingUnitFrames:OnWindowManagementReady()
   Event_FireGenericEvent("WindowManagementAdd", { wnd = self.tCluster4Frame.wndPetFrame,     strName = "Viking Cluster Frame 4" })
 end
 
-
-function VikingUnitFrames:OnRequiredFlagsChanged()
-  if GameLib.GetPlayerUnit() then
-    self:OnCharacterLoaded()
-  else
-    Apollo.RegisterEventHandler("CharacterCreated", "OnCharacterLoaded", self)
-  end
-end
-
-
 function VikingUnitFrames:OnWindowManagementUpdate(tWindow)
   if tWindow and tWindow.wnd and (tWindow.wnd == self.tPlayerFrame.wndUnitFrame or tWindow.wnd == self.tTargetFrame.wndUnitFrame or tWindow.wnd == self.tFocusFrame.wndUnitFrame) then
     local bMoveable = tWindow.wnd:IsStyleOn("Moveable")
@@ -168,7 +158,18 @@ function VikingUnitFrames:OnWindowManagementUpdate(tWindow)
     tWindow.wnd:SetStyle("IgnoreMouse", not bMoveable)
   end
 end
+--------------------------------------------------------------------------------
+-- END: Register VikingUnitFrames Windows with Windows Management
+--------------------------------------------------------------------------------
 
+
+function VikingUnitFrames:OnRequiredFlagsChanged()
+  if GameLib.GetPlayerUnit() then
+    self:OnCharacterLoaded()
+  else
+    Apollo.RegisterEventHandler("CharacterCreated", "OnCharacterLoaded", self)
+  end
+end
 
 function VikingUnitFrames:OnUnitLevelChange()
   self:SetUnitLevel(self.tPlayerFrame)
